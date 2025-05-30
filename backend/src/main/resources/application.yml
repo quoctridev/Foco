@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=foco_db;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: QuocTris1204
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        format_sql: true
