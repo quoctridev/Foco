@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Chưa có tài khoản nào");
         }
         for (User user : users) {
-            result.add(UserRespone.builder().name(user.getName()).storeId(user.getStoreId()).email(user.getEmail()).phone(user.getPhone()).username(user.getUsername()).id(user.getUserId()).isActive(user.isActive()).createdAt(user.getCreatedAt()).build());
+            result.add(UserRespone.builder().name(user.getName()).storeId(user.getStoreId()).roleId(user.getRole().getRoleId()).email(user.getEmail()).phone(user.getPhone()).username(user.getUsername()).id(user.getUserId()).isActive(user.isActive()).createdAt(user.getCreatedAt()).build());
         }
         return result;
     }

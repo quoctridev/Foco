@@ -8,13 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-
+@Table(name = "stores")
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +25,9 @@ public class Store {
     private String address;
     private String phone;
     private String email;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonIgnore
-    private User managerId;
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

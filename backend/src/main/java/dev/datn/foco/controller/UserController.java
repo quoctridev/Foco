@@ -1,5 +1,6 @@
 package dev.datn.foco.controller;
 
+import dev.datn.foco.constaint.ApiVersion;
 import dev.datn.foco.dto.ApiRespone;
 import dev.datn.foco.dto.request.UserCreateRequest;
 import dev.datn.foco.dto.request.UserUpdateRequest;
@@ -7,6 +8,7 @@ import dev.datn.foco.dto.respone.UserRespone;
 import dev.datn.foco.model.User;
 import dev.datn.foco.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +16,11 @@ import java.util.List;
 
 @Controller
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping(ApiVersion.API_VERSION +"/user")
 public class UserController {
     @Autowired
     private UserService userService;
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     ApiRespone<List<UserRespone>> getAllUser() {
         return ApiRespone.<List<UserRespone>>builder()

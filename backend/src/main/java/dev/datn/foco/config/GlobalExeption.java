@@ -18,7 +18,7 @@ public class GlobalExeption {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.BAD_REQUEST.value());
-        body.put("error", "Bad Request");
+        body.put("error", HttpStatus.BAD_REQUEST.getReasonPhrase());
         body.put("message", e.getMessage());
         body.put("path", request.getDescription(false).replace("uri=", ""));
 
@@ -34,4 +34,6 @@ public class GlobalExeption {
 
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
 }

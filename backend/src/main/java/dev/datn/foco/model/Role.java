@@ -14,9 +14,9 @@ import java.util.List;
 @Table(name = "roles")
 @Entity
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 @Data
-@Builder
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,4 +37,5 @@ public class Role {
     @OneToMany(mappedBy = "role")
     @JsonManagedReference
     private List<User> users;
+
 }

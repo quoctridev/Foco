@@ -2,6 +2,7 @@ package dev.datn.foco.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import dev.datn.foco.model.Role;
+import dev.datn.foco.model.Store;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,6 @@ public class UserUpdateRequest {
     private String phone;
     private String email;
     private Role roleId;
-    private Long storeId;
+    private Store storeId;
     private boolean isActive;
 }

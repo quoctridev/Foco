@@ -1,6 +1,7 @@
 package dev.datn.foco.dto.request;
 
 import dev.datn.foco.model.Role;
+import dev.datn.foco.model.Store;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,5 +17,5 @@ public class UserCreateRequest {
     private String password;
     private String phone;
     private Role role;
-    private Long storeId;
+    private Store storeId;
 }

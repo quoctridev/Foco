@@ -22,7 +22,7 @@ public class User {
     private Long userId;
 @Column(nullable = false)
     private String name;
-@Column(nullable = false)
+@Column(name = "username",nullable = false)
     private String username;
 @Column(nullable = false)
     private String password;
@@ -34,8 +34,10 @@ public class User {
 @JoinColumn(name = "role_id")
 @JsonBackReference
     private Role role;
-@Column(name = "store_id")
-    private Long storeId;
+@ManyToOne
+@JoinColumn(name = "store_id")
+@JsonBackReference
+    private Store storeId;
 @Column(name = "is_active",nullable = false)
     private boolean isActive;
 @Column(name = "last_login")
