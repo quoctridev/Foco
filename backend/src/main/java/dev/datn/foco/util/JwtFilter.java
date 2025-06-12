@@ -45,7 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 String username = jwtUtil.getUsername(token);
                 String role = jwtUtil.getRoleId(token);
 
-                if (username == null || role == null) {
+                if (username == null && role == null) {
                     throw new BadCredentialsException("Token không hợp lệ");
                 }
 

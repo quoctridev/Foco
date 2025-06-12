@@ -1,7 +1,7 @@
 package dev.datn.foco.controller;
 
 import dev.datn.foco.constaint.ApiVersion;
-import dev.datn.foco.dto.ApiRespone;
+import dev.datn.foco.dto.ApiResponse;
 import dev.datn.foco.model.Role;
 import dev.datn.foco.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class RoleController {
     private RoleService roleService;
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    ApiRespone<Role> create(@RequestBody Role role) {
-        return ApiRespone.<Role>builder().code(200).data(roleService.create(role)).message("Tạo vai trò dùng thành công").build();
+    ApiResponse<Role> create(@RequestBody Role role) {
+        return ApiResponse.<Role>builder().code(200).data(roleService.create(role)).message("Tạo vai trò dùng thành công").build();
     }
 }

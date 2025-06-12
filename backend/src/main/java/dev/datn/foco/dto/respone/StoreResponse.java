@@ -1,6 +1,5 @@
 package dev.datn.foco.dto.respone;
 
-import dev.datn.foco.model.Store;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,15 +11,12 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRespone {
-    private Long id;
+public class StoreResponse {
+    private Long storeId;
     private String name;
-    private String username;
-    private String email;
+    private String address;
     private String phone;
-    private Long roleId;
-    private String roleName;
-    private Store storeId;
+    private String email;
     private boolean isActive;
     private LocalDateTime createdAt;
 }

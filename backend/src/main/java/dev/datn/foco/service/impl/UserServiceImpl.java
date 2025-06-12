@@ -2,16 +2,16 @@ package dev.datn.foco.service.impl;
 
 import dev.datn.foco.dto.request.UserCreateRequest;
 import dev.datn.foco.dto.request.UserUpdateRequest;
-import dev.datn.foco.dto.respone.UserRespone;
+import dev.datn.foco.dto.respone.UserResponse;
 import dev.datn.foco.model.User;
 import dev.datn.foco.repository.UserRepository;
 import dev.datn.foco.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,12 +23,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserRespone findById(long id) {
+    public UserResponse findById(long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
             throw new IllegalArgumentException("Tài khoản ID " + id + " không tồn tại!");
         }
-        return UserRespone.builder()
+        return UserResponse.builder()
                 .id(user.get().getUserId())
                 .name(user.get().getName())
                 .username(user.get().getUsername())
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserRespone create(UserCreateRequest user) {
+    public UserResponse create(UserCreateRequest user) {
         Optional<User> findUserByUsername= userRepository.findByUsername(user.getUsername());
         if (findUserByUsername.isPresent()) {
             throw new IllegalArgumentException("Tài khoản " + user.getUsername() + " đã có");
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
                 .isActive(true)
                 .build();
         User saved = userRepository.save(userEntity);
-        return UserRespone.builder()
+        return UserResponse.builder()
                 .id(saved.getUserId())
                 .name(saved.getName())
                 .username(saved.getUsername())
@@ -89,8 +89,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserRespone update(UserUpdateRequest user, long id) {
-        User saved = userRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Tài khoản ID \" + id + \" không tồn tại!")) ;
+    public UserResponse update(UserUpdateRequest user, long id) {
+        User saved = userRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Tài khoản ID \" "+ id + "\" không tồn tại!")) ;
         String regexEmail = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         String regexPhone = "^(03|05|07|08|09|01[2689])[0-9]{8}$";
         String email = user.getEmail();
@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
         saved.setRole(user.getRoleId());
         saved.setUpdatedAt(LocalDateTime.now());
         userRepository.save(saved);
-        return UserRespone.builder()
+        return UserResponse.builder()
                 .id(saved.getUserId())
                 .name(saved.getName())
                 .username(saved.getUsername())
@@ -153,17 +153,50 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.deleteById(id);
     }
-
     @Override
-    public List<UserRespone> findAll() {
-        List<UserRespone> result = new ArrayList<>();
+    public List<UserResponse> findAll() {
         List<User> users = userRepository.findAll();
         if(users.isEmpty() || users.size()==0) {
             throw new IllegalArgumentException("Chưa có tài khoản nào");
         }
-        for (User user : users) {
-            result.add(UserRespone.builder().name(user.getName()).storeId(user.getStoreId()).roleId(user.getRole().getRoleId()).email(user.getEmail()).phone(user.getPhone()).username(user.getUsername()).id(user.getUserId()).isActive(user.isActive()).createdAt(user.getCreatedAt()).build());
+
+        return users.stream().map(
+                user ->
+                        UserResponse.builder()
+                                .name(user.getName())
+                                .storeId(user.getStoreId())
+                                .roleId(user.getRole()
+                                        .getRoleId())
+                                .email(user.getEmail())
+                                .phone(user.getPhone())
+                                .username(user.getUsername())
+                                .roleName(user.getRole().getRoleName().toString())
+                                .id(user.getUserId())
+                                .isActive(user.isActive())
+                                .createdAt(user.getCreatedAt())
+                                .build()).toList();
+    }
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
+    @Override
+    public List<UserResponse> findByStoreId(long storeId) {
+        List<User> users = userRepository.findByStoreId_StoreId(storeId);
+        if(users.isEmpty() || users.size()==0) {
+            throw new IllegalArgumentException("Chưa có tài khoản nào");
         }
-        return result;
+        return users.stream().map(
+                user ->
+                        UserResponse.builder()
+                                .name(user.getName())
+                                .storeId(user.getStoreId())
+                                .roleId(user.getRole()
+                                .getRoleId())
+                                .email(user.getEmail())
+                                .phone(user.getPhone())
+                                .username(user.getUsername())
+                                .roleName(user.getRole().getRoleName().toString())
+                                .id(user.getUserId())
+                                .isActive(user.isActive())
+                                .createdAt(user.getCreatedAt())
+                                .build()).toList();
     }
 }

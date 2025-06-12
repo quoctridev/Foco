@@ -1,7 +1,7 @@
 package dev.datn.foco.service.impl;
 
 import dev.datn.foco.dto.request.StoreRequest;
-import dev.datn.foco.dto.respone.StoreRespone;
+import dev.datn.foco.dto.respone.StoreResponse;
 import dev.datn.foco.model.Store;
 import dev.datn.foco.repository.StoreRepository;
 import dev.datn.foco.service.StoreService;
@@ -16,13 +16,13 @@ public class StoreServiceImpl implements StoreService {
     @Autowired
     private StoreRepository storeRepository;
 @Override
-    public Page<StoreRespone> getAllStores(Pageable pageable) {
+    public Page<StoreResponse> getAllStores(Pageable pageable) {
     Page<Store> stores = storeRepository.findAll(pageable);
     if (stores.isEmpty()) {
         throw new IllegalArgumentException("Không tìm thấy cửa hàng nào");
     }
 
-        return stores.map(store->StoreRespone.builder()
+        return stores.map(store-> StoreResponse.builder()
                 .storeId(store.getStoreId())
                 .name(store.getName())
                 .phone(store.getPhone())
@@ -33,7 +33,7 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public StoreRespone createStore(StoreRequest store){
+    public StoreResponse createStore(StoreRequest store){
     if(store.getName() == null || store.getPhone() == null || store.getAddress() == null) {
         throw new IllegalArgumentException("Bạn không thể để trống tên, số điện thoại và địa chỉ");
     }
@@ -46,9 +46,10 @@ public class StoreServiceImpl implements StoreService {
         throw new IllegalArgumentException("Số điện thoại không phù hợp!");
     }
     Store storeEntity = storeRepository.save(Store.builder().address(store.getAddress()).phone(store.getPhone()).name(store.getName()).email(store.getEmail()).build());
-    return StoreRespone.builder().name(storeEntity.getName()).phone(storeEntity.getPhone()).address(storeEntity.getAddress()).build();
+    return StoreResponse.builder().name(storeEntity.getName()).phone(storeEntity.getPhone()).address(storeEntity.getAddress()).build();
     }
-    public StoreRespone updateStore(Long id, StoreRequest request) {
+    @Override
+    public StoreResponse updateStore(Long id, StoreRequest request) {
     Store store = storeRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Không tìm thấy cơ sở"));
     String regexEmail = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
     String regexPhone = "^(03|05|07|08|09|01[2689])[0-9]{8}$";
@@ -64,6 +65,13 @@ public class StoreServiceImpl implements StoreService {
     store.setAddress(request.getAddress());
     store.setActive(request.isActive());
     storeRepository.save(store);
-    return StoreRespone.builder().name(store.getName()).phone(store.getPhone()).build();
+    return StoreResponse.builder().name(store.getName()).phone(store.getPhone()).storeId(store.getStoreId()).address(store.getAddress()).email(store.getEmail()).createdAt(store.getCreatedAt()).build();
+    }
+    @Override
+    public StoreResponse deleteStore(Long id) {
+        Store store = storeRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Không tìm thấy cơ sở"));
+        store.setActive(false);
+        storeRepository.save(store);
+        return StoreResponse.builder().name(store.getName()).phone(store.getPhone()).storeId(store.getStoreId()).address(store.getAddress()).email(store.getEmail()).createdAt(store.getCreatedAt()).build();
     }
 }

@@ -7,8 +7,10 @@ import dev.datn.foco.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -31,8 +33,8 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .exceptionHandling(exeption ->
                         exeption.authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(ApiVersion.API_VERSION +"/auth/**").permitAll()
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers(ApiVersion.API_VERSION +"/auth/**",ApiVersion.API_VERSION + "/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -1,6 +1,6 @@
 package dev.datn.foco.config;
 
-import dev.datn.foco.dto.ApiRespone;
+import dev.datn.foco.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,8 +25,8 @@ public class GlobalExeption {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiRespone<Object>> handleAll(Exception ex) {
-        ApiRespone<Object> response = ApiRespone.builder()
+    public ResponseEntity<ApiResponse<Object>> handleAll(Exception ex) {
+        ApiResponse<Object> response = ApiResponse.builder()
                 .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .message("Lỗi hệ thống: " + ex.getMessage())
                 .data(null)

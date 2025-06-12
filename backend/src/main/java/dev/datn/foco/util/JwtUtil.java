@@ -2,7 +2,8 @@ package dev.datn.foco.util;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import dev.datn.foco.dto.respone.UserRespone;
+import dev.datn.foco.dto.respone.CustomerResponse;
+import dev.datn.foco.dto.respone.UserResponse;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -32,8 +33,7 @@ public class JwtUtil implements AuthenticationEntryPoint {
     private final Key KEY_ACCESS = Keys.hmacShaKeyFor(ACCESS_TOKEN.getBytes(StandardCharsets.UTF_8));
     private final Key KEY_REFRESH = Keys.hmacShaKeyFor(REFRESH_TOKEN.getBytes(StandardCharsets.UTF_8));
 
-    public Map<String,String> generateToken(UserRespone userDetails) {
-
+    public Map<String,String> generateTokenUsers(UserResponse userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", userDetails.getUsername());
         claims.put("email", userDetails.getEmail());
@@ -55,6 +55,29 @@ public class JwtUtil implements AuthenticationEntryPoint {
                 .compact();
         return Map.of("access_token", accessToken, "refresh_token", refreshToken);
     }
+    public Map<String,String> generateTokenCustomers(CustomerResponse customerResponse) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", customerResponse.getId());
+        claims.put("roleId", "CUSTOMER");
+        claims.put("email", customerResponse.getEmail());
+        claims.put("phone", customerResponse.getPhone());
+        //Access token 15mins
+        String accessToken = Jwts.builder()
+                .setClaims(claims)
+                .setSubject(customerResponse.getPhone())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*15))
+                .signWith(KEY_ACCESS, SignatureAlgorithm.HS256)
+                .compact();
+        //Refresh token 7days reset
+        String refreshToken = Jwts.builder()
+                .setSubject(customerResponse.getPhone())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis()+1000*60*60*24*7))
+                .signWith(KEY_REFRESH,SignatureAlgorithm.HS256)
+                .compact();
+        return Map.of("access_token", accessToken, "refresh_token", refreshToken);
+    }
     public Claims extractToken(String token, boolean isRefreshToken) {
         Key key = isRefreshToken ? KEY_REFRESH : KEY_ACCESS;
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
@@ -65,6 +88,7 @@ public class JwtUtil implements AuthenticationEntryPoint {
     public String getEmail(String token) {
         return extractToken(token,false).get("email", String.class);
     }
+    public Long getId (String token) {return extractToken(token,false).get("id", Long.class);}
     public String getRoleId(String token) {
         return extractToken(token,false).get("roleId",String.class);
     }
