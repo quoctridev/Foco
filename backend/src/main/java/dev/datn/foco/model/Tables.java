@@ -6,22 +6,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "zones")
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Zone {
+@Table(name = "tables")
+public class Tables {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "zone_id")
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store storeId;
     private String name;
-    private String description;
-    @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    @ManyToOne
+    @JoinColumn(name = "zone_id")
+    private Zone zoneId;
+    private String status;
+    private int capacity;
+    @Column(name = "is_active")
+    private boolean active;
 }
