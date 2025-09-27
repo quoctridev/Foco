@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-FocoApplication<foco>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "dev.datn.foco.FocoApplication",
+            "projectName": "foco",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

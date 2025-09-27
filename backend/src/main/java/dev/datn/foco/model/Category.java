@@ -6,22 +6,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "zones")
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Zone {
+@Table(name = "categories")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "zone_id")
+    @Column(name = "category_id")
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store store;
     private String name;
     private String description;
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "image_url")
+    private String imageUrl;
+    @Column(name = "sort_order")
+    private Integer sortOrder;
+    @Column(name = "is_active")
     private boolean active;
 }

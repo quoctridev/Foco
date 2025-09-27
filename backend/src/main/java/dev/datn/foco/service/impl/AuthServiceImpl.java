@@ -26,6 +26,7 @@ public class AuthServiceImpl implements AuthService {
     private JwtUtil jwtUtil;
     @Autowired
     private RoleRepository roleRepository;
+    
     @Override
     public AuthResponse login(AuthRequest authRequest) {
         String input = authRequest.getUsername().trim();

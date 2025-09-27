@@ -19,7 +19,7 @@ public class Tables {
     private String name;
     @ManyToOne
     @JoinColumn(name = "zone_id")
-    private Zone zoneId;
+    private Zone zone;
     private String status;
     private int capacity;
     @Column(name = "is_active")

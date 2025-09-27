@@ -6,22 +6,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table(name = "zones")
 @Entity
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Zone {
+@Table(name = "MenuItemOptionValues")
+public class MenuItemOptionValues {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "zone_id")
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "store_id")
-    private Store store;
+    @JoinColumn(name = "option_id")
+    private MenuItemOptions optionId;
     private String name;
-    private String description;
-    @Column(name = "is_active", nullable = false)
+    @Column(name = "extraPrice")
+    private Double extraPrice;
+    @Column(name = "is_active")
     private boolean active;
 }

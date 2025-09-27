@@ -34,7 +34,7 @@ public class TableServiceImpl implements TableService {
     public TableRespone create(TableRequest tableRequest) {
         Zone zone = zoneRepository.findById(tableRequest.getZoneId()).orElseThrow(()-> new IllegalArgumentException("Không có khu vực này"));
         Tables table = tableRepository.save(Tables.builder()
-                .zoneId(zone)
+                .zone(zone)
                 .name(tableRequest.getTableName())
                 .capacity(tableRequest.getCapacity())
                 .status(tableRequest.getStatus())
@@ -76,7 +76,7 @@ public class TableServiceImpl implements TableService {
         return TableRespone.builder()
                 .id(table.getId())
                 .name(table.getName())
-                .zoneName(table.getZoneId().getName()) // lấy tên zone
+                .zoneName(table.getZone().getName()) // lấy tên zone
                 .capacity(table.getCapacity())
                 .status(table.getStatus())
                 .active(table.isActive())

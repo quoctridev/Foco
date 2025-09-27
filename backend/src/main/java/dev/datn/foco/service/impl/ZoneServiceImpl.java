@@ -22,7 +22,7 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public List<ZoneRespone> getAllZonesByStore(Long storeId) {
-        List<Zone> ls = zoneReposiory.findAllByStore_IdAndActiveTrue(storeId);
+        List<Zone> ls = zoneReposiory.findAllByStore_StoreIdAndActiveTrue(storeId);
         if (ls.isEmpty()) {
             throw new IllegalArgumentException("Không có khu vực nào ở cơ sở: " + storeId);
         }
@@ -44,7 +44,7 @@ public class ZoneServiceImpl implements ZoneService {
         oldZone.setName(zone.getName());
         oldZone.setDescription(zone.getDescription());
         oldZone.setActive(zone.isActive());
-        oldZone.setStoreId(storeRepository.getById(zone.getStoreId()));
+        oldZone.setStore(storeRepository.getById(zone.getStoreId()));
         return getZoneRespone(zoneReposiory.save(oldZone));
     }
 
@@ -53,7 +53,7 @@ public class ZoneServiceImpl implements ZoneService {
         if(!storeRepository.existsById(zone.getStoreId())) {
             throw new IllegalArgumentException("Cửa hàng này không có sẵn vui lòng thử lại");
         }
-        return getZoneRespone(zoneReposiory.save(Zone.builder().isActive(true).description(zone.getDescription()).name(zone.getName()).storeId(storeRepository.getById(zone.getStoreId())).build()));
+        return getZoneRespone(zoneReposiory.save(Zone.builder().active(true).description(zone.getDescription()).name(zone.getName()).store(storeRepository.getById(zone.getStoreId())).build()));
     }
 
     @Override
@@ -64,6 +64,6 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     private ZoneRespone getZoneRespone(Zone zone) {
-        return ZoneRespone.builder().id(zone.getId()).name(zone.getName()).storeName(zone.getStoreId().getName()).active(zone.isActive()).description(zone.getDescription()).build();
+        return ZoneRespone.builder().id(zone.getId()).name(zone.getName()).storeName(zone.getStore().getName()).active(zone.isActive()).description(zone.getDescription()).build();
     }
 }

@@ -1,4 +1,9 @@
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
   datasource:
     url: jdbc:sqlserver://localhost:1433;databaseName=foco_db;encrypt=true;trustServerCertificate=true
     username: sa
@@ -15,3 +20,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
         format_sql: true
+cloudflare:
+  r2:
+    endpoint:  https://e9606a532b027b96abd51e54ca5f0018.r2.cloudflarestorage.com
+    accessKey: 1a7b9b9211336bbcb616e0c881887bb6
+    secretKey: 00337a81615cb2831292bf2a395d7510149e20a2538d01df917aa27b6d6cda86
+    bucket:    focoproject
+
+  
