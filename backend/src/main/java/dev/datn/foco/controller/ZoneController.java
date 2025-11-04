@@ -4,7 +4,6 @@ import dev.datn.foco.constaint.ApiVersion;
 import dev.datn.foco.dto.ApiResponse;
 import dev.datn.foco.dto.request.ZoneRequest;
 import dev.datn.foco.dto.respone.ZoneRespone;
-import dev.datn.foco.model.Zone;
 import dev.datn.foco.service.ZoneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

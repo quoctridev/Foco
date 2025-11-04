@@ -5,7 +5,6 @@ import dev.datn.foco.dto.request.CustomerCreateRequest;
 import dev.datn.foco.dto.request.CustomerUpdateRequest;
 import dev.datn.foco.dto.respone.AuthResponse;
 import dev.datn.foco.dto.respone.CustomerResponse;
-import dev.datn.foco.model.Customer;
 
 import java.util.List;
 

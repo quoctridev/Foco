@@ -24,6 +24,7 @@ public class Store {
     private String phone;
     private String email;
     @Column(name = "is_active", nullable = false)
+    @Builder.Default
     private boolean isActive = true;
     @Column(name = "created_at")
     private LocalDateTime createdAt;

@@ -2,10 +2,8 @@ package dev.datn.foco.controller;
 
 import dev.datn.foco.constaint.ApiVersion;
 import dev.datn.foco.dto.ApiResponse;
-import dev.datn.foco.dto.request.CustomerCreateRequest;
 import dev.datn.foco.dto.request.CustomerUpdateRequest;
 import dev.datn.foco.dto.respone.CustomerResponse;
-import dev.datn.foco.model.Customer;
 import dev.datn.foco.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;

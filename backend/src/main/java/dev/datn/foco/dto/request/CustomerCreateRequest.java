@@ -1,6 +1,5 @@
 package dev.datn.foco.dto.request;
 
-import dev.datn.foco.model.CustomerTier;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

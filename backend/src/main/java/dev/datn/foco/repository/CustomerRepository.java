@@ -1,6 +1,5 @@
 package dev.datn.foco.repository;
 
-import dev.datn.foco.dto.respone.CustomerResponse;
 import dev.datn.foco.model.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 

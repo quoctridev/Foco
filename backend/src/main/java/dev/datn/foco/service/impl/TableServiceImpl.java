@@ -2,11 +2,10 @@ package dev.datn.foco.service.impl;
 
 import dev.datn.foco.dto.request.TableRequest;
 import dev.datn.foco.dto.respone.TableRespone;
-import dev.datn.foco.dto.respone.ZoneRespone;
 import dev.datn.foco.model.Tables;
 import dev.datn.foco.model.Zone;
 import dev.datn.foco.repository.TableRepository;
-import dev.datn.foco.repository.ZoneReposiory;
+import dev.datn.foco.repository.ZoneRepository;
 import dev.datn.foco.service.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public class TableServiceImpl implements TableService {
     @Autowired
     private TableRepository tableRepository;
     @Autowired
-    private ZoneReposiory zoneRepository;
+    private ZoneRepository zoneRepository;
 
     @Override
     public List<TableRespone> getAllZonesByStore(Long zone) {
