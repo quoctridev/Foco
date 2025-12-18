@@ -129,7 +129,7 @@ Foco/
 ### 1. Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/quoctridev/Foco.git
 cd Foco
 ```
 
@@ -362,7 +362,6 @@ Dự án này được phát triển bởi QuocTriDev.
 - Email: quoctris.dev@gmail.com
 - Phone: 0793391878
 - Facebook: [quoctris.dev](https://www.facebook.com/quoctris.dev/)
-- GitHub: [quoctridev](https://github.com/quoctridev)
 
 ---
 

@@ -107,7 +107,7 @@ backend/
 ### 1. Clone Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/quoctridev/Foco.git
 cd Foco/backend
 ```
 
@@ -443,5 +443,4 @@ server:
 **QuocTriDev**
 
 - Email: quoctris.dev@gmail.com
-- GitHub: [quoctridev](https://github.com/quoctridev)
 
