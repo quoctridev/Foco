@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TableRespone {
     private Long id;
+    private Long zoneId;
     private String zoneName;
     private String name;
     private int capacity;

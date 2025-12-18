@@ -38,8 +38,27 @@ public class CustomerServiceImpl implements CustomerService {
                 customerRepository.findByEmail(customer.getEmail()).isPresent()) {
             throw new RuntimeException("Tài khoản này đã đăng ký, vui lòng dùng số điện thoại hoặc email khác");
         }
-        if(customerTierRepository.findById(customer.getTier()).isPresent()) {
-            throw new RuntimeException("Không có sẵn hạng này vui lòng thử lại");
+        
+        // Xử lý tier: nếu không có hoặc không tồn tại, lấy tier mặc định (tier đầu tiên hoặc tier có min_points = 0)
+        dev.datn.foco.model.CustomerTier tier;
+        if (customer.getTier() != null) {
+            tier = customerTierRepository.findById(customer.getTier())
+                    .orElse(null);
+        } else {
+            tier = null;
+        }
+        
+        // Nếu tier không tồn tại hoặc không được cung cấp, lấy tier mặc định
+        if (tier == null || !tier.isActive()) {
+            // Lấy tier đầu tiên có min_points = 0 hoặc tier có min_points nhỏ nhất
+            tier = customerTierRepository.findAll().stream()
+                    .filter(t -> t.isActive())
+                    .min((t1, t2) -> {
+                        Long min1 = t1.getMinPoint() != null ? t1.getMinPoint() : 0L;
+                        Long min2 = t2.getMinPoint() != null ? t2.getMinPoint() : 0L;
+                        return min1.compareTo(min2);
+                    })
+                    .orElseThrow(() -> new RuntimeException("Hệ thống chưa có hạng khách hàng nào. Vui lòng liên hệ quản trị viên."));
         }
         if(customer.getName() == null || customer.getName().isBlank()) {
             throw new IllegalArgumentException("Bạn không thể để trống tên");
@@ -55,7 +74,16 @@ public class CustomerServiceImpl implements CustomerService {
         }
         String password = passwordEncoder.encode(customer.getPassword());
 
-        Customer cus  =customerRepository.save(Customer.builder().name(customer.getName()).email(customer.getEmail()).phone(customer.getPhone()).active(true).gender(customer.isGender()).points(0.0).tier(customerTierRepository.findById(customer.getTier()).orElseThrow(()->new IllegalArgumentException("Không có hạng này!"))).password(password).build());
+        Customer cus = customerRepository.save(Customer.builder()
+                .name(customer.getName())
+                .email(customer.getEmail())
+                .phone(customer.getPhone())
+                .active(true)
+                .gender(customer.isGender())
+                .points(0.0)
+                .tier(tier)
+                .password(password)
+                .build());
 
         return toCustomerResponse(cus);
 

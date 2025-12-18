@@ -48,7 +48,11 @@ public class TableServiceImpl implements TableService {
         oldTable.setActive(tableRequest.isActive());
         oldTable.setCapacity(tableRequest.getCapacity());
         oldTable.setStatus(tableRequest.getStatus());
-        tableRepository.save(oldTable);
+        // Update zone if zoneId is provided
+        if (tableRequest.getZoneId() != null) {
+            Zone zone = zoneRepository.findById(tableRequest.getZoneId()).orElseThrow(()-> new IllegalArgumentException("Không có khu vực này"));
+            oldTable.setZone(zone);
+        }
         return convertToResponse(tableRepository.save(oldTable));
     }
 
@@ -74,6 +78,7 @@ public class TableServiceImpl implements TableService {
     private TableRespone convertToResponse(Tables table) {
         return TableRespone.builder()
                 .id(table.getId())
+                .zoneId(table.getZone().getId())
                 .name(table.getName())
                 .zoneName(table.getZone().getName()) // lấy tên zone
                 .capacity(table.getCapacity())

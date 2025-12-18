@@ -25,7 +25,6 @@ public class Customer {
     @Column(name = "phone", unique = true)
     private String phone;
     private String password;
-    //0: Nam; 1: Nữ
     private boolean gender;
     private Double points;
     @ManyToOne
@@ -43,6 +42,7 @@ public class Customer {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
+
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();

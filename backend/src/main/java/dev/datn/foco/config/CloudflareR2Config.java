@@ -30,14 +30,17 @@ public class CloudflareR2Config {
                 .chunkedEncodingEnabled(false)
                 .build();
 
+        // Trim whitespace from credentials and endpoint
+        String endpoint = cloudflareProperties.getEndpoint() != null ? cloudflareProperties.getEndpoint().trim() : "";
+        String accessKey = cloudflareProperties.getAccessKey() != null ? cloudflareProperties.getAccessKey().trim() : "";
+        String secretKey = cloudflareProperties.getSecretKey() != null ? cloudflareProperties.getSecretKey().trim() : "";
+
         return S3Client.builder()
                 .httpClientBuilder(ApacheHttpClient.builder())
                 .region(Region.of("auto"))
-                .endpointOverride(URI.create(cloudflareProperties.getEndpoint()))
+                .endpointOverride(URI.create(endpoint))
                 .credentialsProvider(StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(
-                                cloudflareProperties.getAccessKey(),
-                                cloudflareProperties.getSecretKey())))
+                        AwsBasicCredentials.create(accessKey, secretKey)))
                 .serviceConfiguration(serviceConfig)
                 .build();
     }

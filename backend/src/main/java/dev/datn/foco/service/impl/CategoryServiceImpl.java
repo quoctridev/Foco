@@ -7,7 +7,9 @@ import dev.datn.foco.repository.CategoryRepository;
 import dev.datn.foco.service.CategoryService;
 import dev.datn.foco.service.ImageUploadService;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,5 +56,27 @@ public class CategoryServiceImpl implements CategoryService {
         .sortOrder(saved.getSortOrder())
         .build();
 }
+
+    @Override
+    public List<CategoryRespone> findAll() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream()
+                .map(category -> CategoryRespone.builder()
+                        .id(category.getId())
+                        .name(category.getName())
+                        .description(category.getDescription())
+                        .imageUrl(category.getImageUrl())
+                        .sortOrder(category.getSortOrder())
+                        .active(category.isActive())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(Long id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy danh mục với ID: " + id));
+        categoryRepository.delete(category);
+    }
 
 }

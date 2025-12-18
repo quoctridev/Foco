@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class Tables {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "table_id")
     private Long id;
     private String name;
     @ManyToOne

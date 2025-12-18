@@ -1,13 +1,15 @@
 spring:
+  application:
+    name: foco
   servlet:
     multipart:
       enabled: true
       max-file-size: 20MB
       max-request-size: 20MB
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=foco_db;encrypt=true;trustServerCertificate=true
-    username: sa
-    password: QuocTris1204
+    url: jdbc:sqlserver://157.10.198.238:1433;databaseName=foco_db;encrypt=true;trustServerCertificate=true
+    username: SA
+    password: OrderFlow2026@
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
   jpa:
@@ -22,9 +24,10 @@ spring:
         format_sql: true
 cloudflare:
   r2:
-    endpoint:  https://e9606a532b027b96abd51e54ca5f0018.r2.cloudflarestorage.com
-    accessKey: 1a7b9b9211336bbcb616e0c881887bb6
-    secretKey: 00337a81615cb2831292bf2a395d7510149e20a2538d01df917aa27b6d6cda86
-    bucket:    focoproject
+    account-id: e9606a532b027b96abd51e54ca5f0018
+    access-key-id: 1a7b9b9211336bbcb616e0c881887bb6
+    secret-access-key: ecf4bbb1e4c4cf98619763aa5dc30af7fb34f68121df30a0fa8eb2665d24dfb0
+    bucket-name: focoproject
+    public-url: https://pub-5a7f4e348a9445bc9b0d7c960379b0da.r2.dev
 
   

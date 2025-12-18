@@ -1,5 +1,10 @@
 ALTER LOGIN sa WITH PASSWORD = 'QuocTris1204';
 CREATE DATABASE foco_db
+GO
+
+USE foco_db
+GO
+
 
 CREATE TABLE [Roles] (
   [role_id] int PRIMARY KEY IDENTITY(1, 1),
@@ -9,6 +14,7 @@ CREATE TABLE [Roles] (
   [created_at] datetime DEFAULT GETDATE()
 )
 GO
+
 
 CREATE TABLE [Stores] (
   [store_id] int PRIMARY KEY IDENTITY(1, 1),
@@ -174,6 +180,7 @@ CREATE TABLE [OrderDetails] (
 GO
 
 CREATE TABLE [OrderDetailOptions] (
+  [id] int PRIMARY KEY IDENTITY(1, 1),
   [order_detail_id] int NOT NULL,
   [value_id] int NOT NULL,
   [quantity] int DEFAULT (1),
@@ -201,6 +208,7 @@ CREATE TABLE [Discounts] (
 GO
 
 CREATE TABLE [OrderDiscounts] (
+  [id] int PRIMARY KEY IDENTITY(1, 1),
   [order_id] int NOT NULL,
   [discount_id] int NOT NULL,
   [discount_amount] decimal(10,2) NOT NULL,
@@ -237,7 +245,8 @@ CREATE TABLE [Inventory] (
   [quantity] int DEFAULT (0),
   [min_stock_level] int DEFAULT (0),
   [max_stock_level] int DEFAULT (100),
-  [updated_at] datetime DEFAULT GETDATE()
+  [updated_at] datetime DEFAULT GETDATE(),
+  PRIMARY KEY ([store_id], [item_id])
 )
 GO
 
@@ -308,7 +317,8 @@ CREATE TABLE [IngredientInventory] (
   [max_stock_level] decimal(10,2) DEFAULT (100),
   [unit_cost] decimal(10,2),
   [last_purchase_date] date,
-  [updated_at] datetime DEFAULT GETDATE()
+  [updated_at] datetime DEFAULT GETDATE(),
+  PRIMARY KEY ([store_id], [ingredient_id])
 )
 GO
 
@@ -424,4 +434,71 @@ ALTER TABLE [BillOfMaterials] ADD FOREIGN KEY ([item_id]) REFERENCES [MenuItems]
 GO
 
 ALTER TABLE [BillOfMaterials] ADD FOREIGN KEY ([ingredient_id]) REFERENCES [Ingredients] ([ingredient_id])
+GO
+
+-- Dữ Liệu Mẫu
+
+-- Insert Roles
+INSERT INTO [Roles] ([role_name], [description], [is_active]) VALUES
+('ADMIN', N'Quản trị viên - Toàn quyền hệ thống', 1),
+('MANAGER', N'Quản lý cửa hàng - Quản lý nhân viên và báo cáo', 1),
+('CHEF', N'Đầu bếp - Xem và cập nhật trạng thái món', 1),
+('ORDER', N'Nhân viên order - Tạo và xử lý đơn hàng', 1),
+('CUSTOMER', N'Khách hàng - Đặt món và xem lịch sử', 1);
+GO
+
+-- Insert Store
+INSERT INTO [Stores] ([name], [address], [phone], [email], [is_active]) VALUES
+(N'FOCO Chi Nhánh 1', N'123 Nguyễn Huệ, Quận 1, TP.HCM', '0281234567', 'cn1@foco.com', 1);
+GO
+
+-- Insert Customer Tiers
+INSERT INTO [CustomerTiers] ([name], [min_points], [discount_rate], [color], [is_active]) VALUES
+(N'Thành Viên', 0, 0, 'gray', 1),
+(N'Bạc', 1000, 5, 'silver', 1),
+(N'Vàng', 5000, 10, 'gold', 1),
+(N'Kim Cương', 10000, 15, 'diamond', 1);
+GO
+
+-- Insert Sample Categories
+INSERT INTO [Categories] ([name], [description], [sort_order], [is_active]) VALUES
+(N'Món Chính', N'Các món ăn chính', 1, 1),
+(N'Món Phụ', N'Các món ăn phụ và khai vị', 2, 1),
+(N'Đồ Uống', N'Nước uống các loại', 3, 1),
+(N'Tráng Miệng', N'Món tráng miệng ngọt ngào', 4, 1);
+GO
+
+-- Insert Sample Users
+INSERT INTO [Users] ([username], [name], [email], [password], [phone], [role_id], [store_id], [is_active]) VALUES
+('admin', N'Quản Trị Viên', 'admin@foco.com', '$2a$10$encrypted_password', '0901234567', 1, 1, 1),
+('manager', N'Quản Lý', 'manager@foco.com', '$2a$10$encrypted_password', '0901234568', 2, 1, 1),
+('chef', N'Đầu Bếp', 'chef@foco.com', '$2a$10$encrypted_password', '0901234569', 3, 1, 1),
+('order', N'Nhân Viên Order', 'order@foco.com', '$2a$10$encrypted_password', '0901234570', 4, 1, 1);
+GO
+
+-- Insert Sample Customer
+INSERT INTO [Customers] ([name], [email], [password], [phone], [gender], [points], [tier_id], [is_active]) VALUES
+(N'Nguyễn Văn A', 'customer@gmail.com', '$2a$10$encrypted_password', '0912345678', 'male', 0, 1, 1);
+GO
+
+-- Insert Sample Zones
+INSERT INTO [Zones] ([store_id], [name], [description], [is_active]) VALUES
+(1, N'Khu A - Tầng 1', N'Khu vực tầng 1 gần cửa', 1),
+(1, N'Khu B - Tầng 2', N'Khu vực tầng 2 yên tĩnh', 1);
+GO
+
+-- Insert Sample Tables
+INSERT INTO [Tables] ([zone_id], [name], [status], [capacity], [is_active]) VALUES
+(1, N'Bàn 01', 'available', 4, 1),
+(1, N'Bàn 02', 'available', 4, 1),
+(1, N'Bàn 03', 'available', 6, 1),
+(2, N'Bàn 04', 'available', 2, 1),
+(2, N'Bàn 05', 'available', 4, 1);
+GO
+
+-- =============================================
+-- End of Script
+-- =============================================
+PRINT N'Database foco_db đã được tạo thành công!'
+PRINT N'Đã thêm dữ liệu mẫu: Roles, Store, Users, Tiers, Zones, Tables'
 GO

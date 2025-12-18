@@ -9,6 +9,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 
@@ -26,11 +27,15 @@ public class ImageUploadService {
                     .contentType(file.getContentType())
                     .build();
 
-            // Fix: dùng byte array thay vì InputStream
             byte[] bytes = file.getBytes();
             s3Client.putObject(putObjectRequest, RequestBody.fromBytes(bytes));
 
-            return cloudflareProperties.getEndpoint() + "/" + cloudflareProperties.getBucket() + "/" + fileName;
+            String publicUrl = cloudflareProperties.getPublicUrl();
+            if (publicUrl != null && !publicUrl.isEmpty()) {
+                return publicUrl + "/" + fileName;
+            } else {
+                return cloudflareProperties.getEndpoint() + "/" + cloudflareProperties.getBucket() + "/" + fileName;
+            }
         } catch (IOException e) {
             throw new RuntimeException("Gửi ảnh lên thất bại: " + e.getMessage(), e);
         }

@@ -27,12 +27,24 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> {})
                 .formLogin(formLogin -> formLogin.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .exceptionHandling(exeption ->
                         exeption.authenticationEntryPoint(jwtAuthenticationEntryPoint).accessDeniedHandler(jwtAccessDeniedHandler))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(ApiVersion.API_VERSION +"/auth/**",ApiVersion.API_VERSION + "/public/**").permitAll()
+                        auth
+                        // Public endpoints - không cần authentication
+                        .requestMatchers(
+                            ApiVersion.API_VERSION + "/auth/**",
+                            ApiVersion.API_VERSION + "/public/**",
+                            ApiVersion.API_VERSION + "/customer-auth/**",
+                            ApiVersion.API_VERSION + "/menu-items/**",
+                            ApiVersion.API_VERSION + "/menu-items/available",
+                            ApiVersion.API_VERSION + "/categories/**",
+                            "/ws/**"  // WebSocket endpoint
+                        ).permitAll()
+                        // Tất cả request khác cần authentication
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
